@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Service class that manages cinema-related operations.
@@ -109,16 +110,20 @@ public class CinemaService {
      */
     public Seat getSeat(int row, int column) {
 
-        for (Seat seat : seats) {
-            if (seat.getRow() == row && seat.getColumn() == column) {
-                if (seat.isBooked()) {
-                    throw new Error("The ticket has been already purchased!");
-                }
+        Optional<Seat> foundSeat = seats.stream()
+                .filter(seat -> seat.getRow() == row && seat.getColumn() == column)
+                .findFirst();
 
-                return seat;
+        if (foundSeat.isPresent()) {
+            Seat seat = foundSeat.get();
+
+            if (seat.isBooked()) {
+                throw new Error("The ticket has been already purchased!");
             }
+            return seat;
+        } else {
+            throw new Error("The number of a row or a column is out of bounds!");
         }
-        throw new Error("The number of a row or a column is out of bounds!");
     }
 
     public ReturnResponse getReturnedSeat(String token) {
@@ -135,11 +140,15 @@ public class CinemaService {
     }
 
     public Seat getSeat(String token) {
-        for (Seat seat : seats) {
-            if (Objects.equals(seat.getToken(), token)) {
-                return seat;
-            }
+
+        Optional<Seat> foundSeat = seats.stream()
+                .filter(seat -> Objects.equals(seat.getToken(), token))
+                .findFirst();
+
+        if (foundSeat.isPresent()) {
+            return foundSeat.get();
+        } else {
+            throw new Error("Wrong token!");
         }
-        throw new Error("Wrong token!");
     }
 }
