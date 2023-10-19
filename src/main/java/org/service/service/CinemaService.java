@@ -17,7 +17,7 @@ import java.util.Optional;
  * Service class that manages cinema-related operations.
  */
 @Service
-public class CinemaService {
+public class CinemaService implements CinemaServiceInterface {
 
     private final List<Seat> seats;
     public final Statistics statistics;
@@ -70,36 +70,6 @@ public class CinemaService {
     }
 
     /**
-     * Retrieves the cinema configuration, including rows, columns, and seats.
-     *
-     * @return A Cinema object representing the cinema configuration.
-     */
-    public Cinema getCinema() {
-
-        Cinema cinema = new Cinema();
-        cinema.setRows(TOTAL_ROWS);
-        cinema.setColumns(TOTAL_COLUMNS);
-        cinema.setSeats(getSeats());
-
-        return cinema;
-    }
-
-    public PurchaseResponse getPurchasedSeat(int row, int column) {
-
-        var token = Token.generate();
-        var seat = this.getSeat(row, column);
-        seat.setBooked(true);
-        seat.setToken(token);
-
-        this.statistics.setCurrentIncome(this.statistics.getCurrentIncome() + seat.getPrice());
-        this.statistics.setAvailableSeats(this.statistics.getAvailableSeats() - 1);
-        this.statistics.setPurchasedSeats(this.statistics.getPurchasedSeats() + 1);
-
-        var purchasedSeat = new Seat(seat.getRow(), seat.getColumn(), seat.getPrice());
-        return new PurchaseResponse(token, purchasedSeat);
-    }
-
-    /**
      * Retrieves a specific seat based on row and column numbers.
      *
      * @param row    The row number of the seat.
@@ -126,19 +96,6 @@ public class CinemaService {
         }
     }
 
-    public ReturnResponse getReturnedSeat(String token) {
-        var seat = getSeat(token);
-        seat.setBooked(false);
-        seat.setToken("");
-
-        this.statistics.setCurrentIncome(this.statistics.getCurrentIncome() - seat.getPrice());
-        this.statistics.setAvailableSeats(this.statistics.getAvailableSeats() + 1);
-        this.statistics.setPurchasedSeats(this.statistics.getPurchasedSeats() - 1);
-
-        var returnedSeat = new Seat(seat.getRow(), seat.getColumn(), seat.getPrice());
-        return new ReturnResponse(returnedSeat);
-    }
-
     public Seat getSeat(String token) {
 
         Optional<Seat> foundSeat = seats.stream()
@@ -150,5 +107,51 @@ public class CinemaService {
         } else {
             throw new Error("Wrong token!");
         }
+    }
+
+    /**
+     * Retrieves the cinema configuration, including rows, columns, and seats.
+     *
+     * @return A Cinema object representing the cinema configuration.
+     */
+    @Override
+    public Cinema getCinema() {
+
+        Cinema cinema = new Cinema();
+        cinema.setRows(TOTAL_ROWS);
+        cinema.setColumns(TOTAL_COLUMNS);
+        cinema.setSeats(getSeats());
+
+        return cinema;
+    }
+
+    @Override
+    public PurchaseResponse getPurchasedSeat(int row, int column) {
+
+        var token = Token.generate();
+        var seat = this.getSeat(row, column);
+        seat.setBooked(true);
+        seat.setToken(token);
+
+        this.statistics.setCurrentIncome(this.statistics.getCurrentIncome() + seat.getPrice());
+        this.statistics.setAvailableSeats(this.statistics.getAvailableSeats() - 1);
+        this.statistics.setPurchasedSeats(this.statistics.getPurchasedSeats() + 1);
+
+        var purchasedSeat = new Seat(seat.getRow(), seat.getColumn(), seat.getPrice());
+        return new PurchaseResponse(token, purchasedSeat);
+    }
+
+    @Override
+    public ReturnResponse getReturnedSeat(String token) {
+        var seat = getSeat(token);
+        seat.setBooked(false);
+        seat.setToken("");
+
+        this.statistics.setCurrentIncome(this.statistics.getCurrentIncome() - seat.getPrice());
+        this.statistics.setAvailableSeats(this.statistics.getAvailableSeats() + 1);
+        this.statistics.setPurchasedSeats(this.statistics.getPurchasedSeats() - 1);
+
+        var returnedSeat = new Seat(seat.getRow(), seat.getColumn(), seat.getPrice());
+        return new ReturnResponse(returnedSeat);
     }
 }

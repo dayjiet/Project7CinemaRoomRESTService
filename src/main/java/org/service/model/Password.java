@@ -1,9 +1,5 @@
 package org.service.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * Utility class for providing a secret password.
  */

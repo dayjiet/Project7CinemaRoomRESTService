@@ -1,17 +1,11 @@
 package org.service.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
 /**
  * Utility class for generating random tokens.
  */
 public class Token {
-
-    String token;
 
     /**
      * Generates a random token as a UUID.
