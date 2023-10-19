@@ -1,10 +1,16 @@
 package org.service.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents a seat in a cinema.
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Seat {
 
     private int row;
@@ -12,12 +18,6 @@ public class Seat {
     private int price;
     private boolean isBooked;
     private String token;
-
-    /**
-     * Default constructor for Seat.
-     */
-    public Seat() {
-    }
 
     /**
      * Parameterized constructor for Seat.
@@ -34,46 +34,14 @@ public class Seat {
         this.token = "";
     }
 
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getColumn() {
-        return column;
-    }
-
-    public void setColumn(int column) {
-        this.column = column;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
     @JsonIgnore
     public boolean isBooked() {
         return isBooked;
     }
 
-    public void setBooked(boolean booked) {
-        isBooked = booked;
-    }
-
     @JsonIgnore
     public String getToken() {
         return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     /**

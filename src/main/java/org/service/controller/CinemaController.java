@@ -1,5 +1,6 @@
 package org.service.controller;
 
+import lombok.AllArgsConstructor;
 import org.service.dto.PurchaseRequest;
 import org.service.dto.ReturnRequest;
 import org.service.model.ErrorMessage;
@@ -15,19 +16,11 @@ import java.util.Objects;
 /**
  * Controller class for managing cinema-related HTTP endpoints.
  */
+@AllArgsConstructor
 @RestController
 public class CinemaController {
 
     private final CinemaService cinemaService;
-
-    /**
-     * Initializes a CinemaController with a CinemaService instance.
-     *
-     * @param cinemaService The CinemaService to handle cinema operations.
-     */
-    public CinemaController(CinemaService cinemaService) {
-        this.cinemaService = cinemaService;
-    }
 
     /**
      * Retrieves information about the available seats in the cinema.

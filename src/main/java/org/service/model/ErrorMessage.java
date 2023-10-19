@@ -1,29 +1,18 @@
 package org.service.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents an error message with a description.
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ErrorMessage {
 
     @JsonProperty("error")
     String message;
-
-    /**
-     * Parameterized constructor for ErrorMessage.
-     *
-     * @param message The error message description.
-     */
-    public ErrorMessage(String message) {
-        this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }
